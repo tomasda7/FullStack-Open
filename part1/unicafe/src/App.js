@@ -18,17 +18,25 @@ const Button = ({handleClick, text}) => {
   )
 }
 
-
 const App = () => {
 
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [score, SetScore] = useState(0);
+  let total = good + neutral + bad;
 
-  const handleGood = () => setGood(good + 1);
-  const handleNeutral = () => setNeutral(neutral + 1);
-  const handleBad = () => setBad(bad + 1);
-
+  const handleGood = () => {
+    setGood(good + 1);
+    SetScore(score + 1);
+  };
+  const handleNeutral = () => {
+    setNeutral(neutral + 1);
+  };
+  const handleBad = () => {
+    setBad(bad + 1);
+    SetScore(score - 1);
+  };
 
   return (
     <div>
@@ -41,6 +49,9 @@ const App = () => {
       <h3>goods: {good}</h3>
       <h3>neutrals: {neutral}</h3>
       <h3>bads: {bad}</h3>
+      <h3>all: {total}</h3>
+      <h3>average: {score / total}</h3>
+      <h3>positive: {(good / total) * 100}</h3>
     </div>
   );
 }
