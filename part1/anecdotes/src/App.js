@@ -48,7 +48,7 @@ const App = () => {
 
 
   const handleSelected = () => {
-    let random = Math.floor(Math.random() * anecdotes.length);
+    const random = Math.floor(Math.random() * anecdotes.length);
     Setselected(random);
   }
 
