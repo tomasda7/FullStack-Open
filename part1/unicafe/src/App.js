@@ -19,16 +19,23 @@ const Button = ({handleClick, text}) => {
 }
 
 const Statistics = ({good, neutral, bad, score, total}) => {
-  return (
-    <>
-      <h3>goods: {good}</h3>
-      <h3>neutrals: {neutral}</h3>
-      <h3>bads: {bad}</h3>
-      <h3>all: {total}</h3>
-      <h3>average: {score / total}</h3>
-      <h3>positive: {(good / total) * 100}</h3>
-    </>
-  )
+
+  if(good !== 0 || neutral !== 0 || bad !== 0) {
+    return (
+      <>
+        <h3>goods: {good}</h3>
+        <h3>neutrals: {neutral}</h3>
+        <h3>bads: {bad}</h3>
+        <h3>all: {total}</h3>
+        <h3>average: {score / total}</h3>
+        <h3>positive: {(good / total) * 100}</h3>
+      </>
+    )
+  } else {
+    return (
+      <h2>No feedback given</h2>
+    )
+  }
 }
 
 const App = () => {
