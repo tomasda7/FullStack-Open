@@ -60,15 +60,20 @@ const App = () => {
   let total = good + neutral + bad;
 
   const handleGood = () => {
-    setGood(good + 1);
-    SetScore(score + 1);
+    const updatedGood = good + 1;
+    const updatedScore = score + 1;
+    setGood(updatedGood);
+    SetScore(updatedScore);
   };
   const handleNeutral = () => {
-    setNeutral(neutral + 1);
+    const updatedNeutral = neutral + 1;
+    setNeutral(updatedNeutral);
   };
   const handleBad = () => {
-    setBad(bad + 1);
-    SetScore(score - 1);
+    const updatedBad = bad + 1;
+    const updatedScore = score - 1;
+    setBad(updatedBad);
+    SetScore(updatedScore);
   };
 
   return (
