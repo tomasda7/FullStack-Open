@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
+import Filter from './components/Filter';
+
 const App = () => {
 
   const [persons, setPersons] = useState([
-    { name: 'Leo Messi', id: 1, number: 3777181223 },
+    { name: 'Leo Messi', number: 3777181223, id: 1 },
     { name: 'Gonzalo Montiel', number: 2040123456, id: 2 },
     { name: 'Rodrigo De Paul', number: 39445323523, id: 3 },
     { name: 'Gio Lo Celso', number: 1243234345, id: 4 },
@@ -19,8 +23,8 @@ const App = () => {
     event.preventDefault();
     const personObj = {
       name: newName,
+      number: newNumber,
       id: persons.length + 1,
-      number: newNumber
     }
 
     persons.forEach(person => {
@@ -48,29 +52,25 @@ const App = () => {
   }
 
   const personsToShow = !filteredName.length ?
-  persons :
-  persons.filter(person => person.name.toLocaleLowerCase().includes(filteredName.toLocaleLowerCase()));
+    persons :
+    persons.filter(person =>
+      person.name.toLocaleLowerCase().includes(filteredName.toLocaleLowerCase())
+  );
 
   return (
     <div>
       <h1>Phonebook</h1>
       <h2>Add a new contact</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type='submit'>Add</button>
-        </div>
-      </form>
+      <PersonForm
+      addPerson={addPerson}
+      newName={newName}
+      handleNameChange={handleNameChange}
+      newNumber={newNumber}
+      handleNumberChange={handleNumberChange}
+      />
       <h2>Numbers</h2>
-      <div>
-        Filter by name: <input value={filteredName} onChange={handleFilteredName}/>
-      </div>
-      {personsToShow.map(person => <h4 key={person.id}>{person.name} {person.number}</h4>)}
+      <Filter filteredName={filteredName} handleFilteredName={handleFilteredName} />
+      <Persons persons={personsToShow} />
     </div>
   );
 }
