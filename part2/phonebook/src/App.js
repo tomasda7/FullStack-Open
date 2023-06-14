@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -6,18 +7,20 @@ import Filter from './components/Filter';
 
 const App = () => {
 
-  const [persons, setPersons] = useState([
-    { name: 'Leo Messi', number: 3777181223, id: 1 },
-    { name: 'Gonzalo Montiel', number: 2040123456, id: 2 },
-    { name: 'Rodrigo De Paul', number: 39445323523, id: 3 },
-    { name: 'Gio Lo Celso', number: 1243234345, id: 4 },
-    { name: 'Paulo Dybala', number: 39236423122, id: 5 },
-    { name: 'Cristian Romero', number: 273255667, id: 6 }
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filteredName, setFilteredName] = useState('');
+
+  useEffect(() => {
+    console.log('effect');
+    axios.get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('Promise Fulfilled');
+        setPersons(response.data)
+    })
+  }, [])
+  console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
     event.preventDefault();
