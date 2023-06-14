@@ -26,20 +26,15 @@ const App = () => {
     event.preventDefault();
     const personObj = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1,
+      number: newNumber
     }
 
-    persons.forEach(person => {
-      if(person.name.includes(newName)) {
-        setPersons(persons);
-        return alert(`${newName} is already added to phonebook!`);
-      } else {
-        setPersons(persons.concat(personObj));
+    axios.post('http://localhost:3001/persons', personObj)
+      .then(response => {
+        setPersons(persons.concat(response.data));
         setNewName('');
         setNewNumber('');
-      }
-    })
+    });
   }
 
   const handleNameChange = (event) => {
