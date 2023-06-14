@@ -1,8 +1,27 @@
 
-const Persons = ({ persons }) => {
+const Person = ({ name, number, id, deleteHandler }) => {
     return (
         <>
-            {persons.map(person => <h4 key={person.id}>{person.name} {person.number}</h4>)}
+            <h4>{name} {number}</h4>
+            <button key={id} onClick={() => deleteHandler(id)}>
+                delete
+            </button>
+        </>
+    )
+}
+
+
+const Persons = ({ persons, deleteHandler }) => {
+    return (
+        <>
+            {persons.map(person =>
+                <Person
+                key={person.id}
+                name={person.name}
+                number={person.number}
+                deleteHandler={() => deleteHandler(person.id)}
+                />
+            )}
         </>
     )
 };
