@@ -24,12 +24,33 @@ const App = () => {
       number: newNumber
     }
 
-    personService.create(personObj)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName('');
-        setNewNumber('');
-    });
+    const existPerson = persons.find(person =>
+      person.name.toLocaleLowerCase() === newName.toLocaleLowerCase()
+    );
+
+    const changedPerson = {
+      ...existPerson,
+      number: newNumber
+    }
+
+    if(existPerson) {
+      if(window.confirm(`${existPerson.name} is already on the phonebook, do you want to update their number?`)) {
+        personService.update(existPerson.id, changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person =>
+              person.id !== existPerson.id ? person : returnedPerson));
+            setNewName('');
+            setNewNumber('');
+        });
+      }
+    } else {
+      personService.create(personObj)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName('');
+          setNewNumber('');
+      });
+    }
   }
 
   const handleNameChange = (event) => {
