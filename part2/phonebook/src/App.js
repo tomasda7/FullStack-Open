@@ -4,6 +4,7 @@ import personService from './services/persons';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filteredName, setFilteredName] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll()
@@ -41,6 +43,10 @@ const App = () => {
               person.id !== existPerson.id ? person : returnedPerson));
             setNewName('');
             setNewNumber('');
+            setMessage(`${existPerson.name}'s number was updated correctly!`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
         });
       }
     } else {
@@ -49,6 +55,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
+          setMessage(`${personObj.name} was added successfully!`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
       });
     }
   }
@@ -70,8 +80,11 @@ const App = () => {
     if(window.confirm(`Are you sure to delete ${confirmPerson.name}?`)) {
       personService.remove(id)
       .then(response => {
-        console.log('deleted successfully!')
-        setPersons(persons.filter(person => person.id !== id))
+        setPersons(persons.filter(person => person.id !== id));
+        setMessage(`${confirmPerson.name} was deleted successfully!`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     }
   }
@@ -85,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
       <h2>Add a new contact</h2>
       <PersonForm
       addPerson={addPerson}
