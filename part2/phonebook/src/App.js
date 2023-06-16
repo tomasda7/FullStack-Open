@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filteredName, setFilteredName] = useState('');
   const [message, setMessage] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     personService.getAll()
@@ -47,7 +48,18 @@ const App = () => {
             setTimeout(() => {
               setMessage(null)
             }, 5000)
-        });
+        }).catch(error => {
+          console.log(error);
+          setIsError(true);
+          setMessage(`${existPerson.name} was already deleted from server.`)
+          setPersons(persons.filter(person => person.id !== existPerson.id));
+          setNewName('');
+          setNewNumber('');
+          setTimeout(() => {
+            setIsError(false);
+            setMessage(null)
+          }, 5000)
+        })
       }
     } else {
       personService.create(personObj)
@@ -98,7 +110,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={message} style={isError ? "error" : "success"}/>
       <h2>Add a new contact</h2>
       <PersonForm
       addPerson={addPerson}
