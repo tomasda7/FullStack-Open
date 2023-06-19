@@ -1,13 +1,14 @@
 
-const Country = ({ name }) => {
+const Country = ({ name, handleClick, id }) => {
     return (
         <>
             <h4>{name}</h4>
+            <button key={id} onClick={() => handleClick(id)}>show</button>
         </>
     )
 };
 
-const Detail = ({country}) => {
+const Detail = ({ country }) => {
     const langs = Object.values(country.languages);
 
     return (
@@ -24,7 +25,7 @@ const Detail = ({country}) => {
     )
 }
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleShow }) => {
     if(countries.length > 10) {
         return <h4>too many results, specify another filter</h4>
     } else if (countries.length === 1) {
@@ -33,7 +34,11 @@ const Countries = ({ countries }) => {
 
     return (
         <>
-            {countries.map(country => <Country key={country.id} name={country.name}/>)}
+            {countries.map(country => <Country
+                key={country.id}
+                name={country.name}
+                handleClick={() => handleShow(country.id)}
+            />)}
         </>
     )
 };

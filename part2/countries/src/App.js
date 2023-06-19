@@ -22,10 +22,15 @@ const App = () => {
       setCountries(allCountries);
       console.log("Los paises han sido cargados correctamente");
     })
-  },[])
+  },[search])
 
   const handleSearch = (event) => {
     setSearch(event.target.value)
+  }
+
+  const handleShow = (id) => {
+    const country = countries.find(country => country.id === id);
+    setCountries([country]);
   }
 
   const countriestoShow = search.length ?
@@ -37,7 +42,7 @@ const App = () => {
       <div>
         find countries: <input value={search} onChange={handleSearch} />
       </div>
-      <Countries countries={countriestoShow}/>
+      <Countries countries={countriestoShow} handleShow={handleShow}/>
     </div>
   );
 }
