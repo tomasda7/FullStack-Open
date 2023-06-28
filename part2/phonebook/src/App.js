@@ -71,7 +71,16 @@ const App = () => {
           setTimeout(() => {
             setMessage(null)
           }, 5000)
-      });
+      })
+      .catch(error => {
+        console.log(error);
+        setIsError(true);
+        setMessage(error.response.data.error);
+        setTimeout(() => {
+          setIsError(false);
+          setMessage(null);
+        }, 5000)
+      })
     }
   }
 
