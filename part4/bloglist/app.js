@@ -1,45 +1,33 @@
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
-
+const morgan = require('morgan')
 const app = express()
-
-const blogSchema = new mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
-
-const password = 'tTgH0cBEOkKJyfai'
-const mongoURL = `mongodb+srv://tomasda7:${password}@open.8iruedz.mongodb.net/bloglistApp?retryWrites=true&w=majority`
+const mongoose = require('mongoose')
+const config = require('./utils/config')
+const { info, error } = require('./utils/loggers')
+const blogsRouter = require('./controllers/blogs')
+const middleware = require('./utils/middleware')
 
 mongoose.set('strictQuery', false)
-mongoose.connect(mongoURL)
+
+info('Connecting to', config.MONGODB_URI)
+
+mongoose.connect(config.MONGODB_URI)
   .then(() => {
-    console.log('Connected to MongoDB successfully')
+    info('Connected to MongoDB successfully')
   })
-  .catch((error) => {
-    console.log('Error in connection with MongoDB: ', error.message)
+  .catch((err) => {
+    error('Error in connection with MongoDB: ', err.message)
   })
 
+morgan.token('body', (request) => { return JSON.stringify(request.body) })
+
+app.use(morgan(':method :url :status :response-time ms - :body'))
 app.use(cors())
 app.use(express.json())
+app.use('/api/blogs', blogsRouter)
 
-app.get('/api/blogs', (req, res) => {
-    Blog.find({}).then(blogs => {
-        res.json(blogs)
-    })
-})
-
-app.post('/api/blogs', (req, res) => {
-    const blog = new Blog(req.body)
-
-    blog.save().then(result => {
-        res.status(201).json(result)
-    })
-})
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 module.exports = app
