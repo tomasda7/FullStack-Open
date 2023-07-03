@@ -72,6 +72,24 @@ test('a valid blog can be added', async () => {
   expect(blogs[blogs.length-1].likes).toBe(444)
 })
 
+test('if a blog is added without the likes property, must be 0 by default', async () => {
+  const newBlog = {
+    title: "Recipes blog",
+    author: "Chef Mark",
+    url: "http//ForDinner.com"
+  }
+
+  await api.post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const response = await api.get('/api/blogs')
+
+  const blogs = response.body.map(blog => blog)
+
+  expect(blogs[blogs.length-1].likes).toBe(0)
+})
+
 /* blogs.forEach(blog => {
   expect(blog).toHaveProperty('title')
   expect(blog.title).toBeDefined()
