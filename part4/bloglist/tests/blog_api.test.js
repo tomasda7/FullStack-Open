@@ -90,16 +90,20 @@ test('if a blog is added without the likes property, must be 0 by default', asyn
   expect(blogs[blogs.length-1].likes).toBe(0)
 })
 
-/* blogs.forEach(blog => {
-  expect(blog).toHaveProperty('title')
-  expect(blog.title).toBeDefined()
-  expect(blog).toHaveProperty('author')
-  expect(blog.author).toBeDefined()
-  expect(blog).toHaveProperty('url')
-  expect(blog.url).toBeDefined()
-  expect(blog).toHaveProperty('likes')
-  expect(blog.likes).toBeDefined()
-}) */
+test('a blog without the title or url properties must be rejected', async () => {
+  const invalidBlog = {
+    author: "Tomas",
+    likes: 400
+  }
+
+  await api.post('/api/blogs')
+    .send(invalidBlog)
+    .expect(400)
+
+  const response = await api.get('/api/blogs')
+
+  expect(response.body).toHaveLength(initialBlogs.length)
+})
 
 afterAll(async () => {
     await mongoose.connection.close()
