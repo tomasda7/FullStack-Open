@@ -36,6 +36,20 @@ test('the blogs are returned in the correct amount and as JSON', async () => {
     expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+test('the unique identifier property of blogs should be named id', async () => {
+
+  const response = await api.get('/api/blogs')
+
+  const blogs = response.body.map(blog => blog)
+
+  blogs.forEach(blog => {
+    expect(blog).toHaveProperty('id')
+    expect(blog.id).toBeDefined()
+  })
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
+
+//npm test -- tests/blog_api.test.js
