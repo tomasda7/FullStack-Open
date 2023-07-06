@@ -5,7 +5,7 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const { initialBlogs, blogsInDb } = require('../utils/blog_api_helper')
 
-beforeEach(async() => {
+beforeEach(async () => {
   await Blog.deleteMany({})
 
   for (let blog of initialBlogs) {
@@ -14,12 +14,15 @@ beforeEach(async() => {
   }
 })
 
+const token = process.env.TOKEN
+
 describe('Fetch data functionalities tests', () => {
 
   test('the blogs are returned in the correct amount and as JSON', async () => {
 
     const response = await api
         .get('/api/blogs')
+        .set({ Authorization: `Bearer ${token}` })
         .expect(200)
         .expect('Content-Type', /application\/json/)
       expect(response.body).toHaveLength(initialBlogs.length)
@@ -39,15 +42,17 @@ describe('Fetch data functionalities tests', () => {
 describe('Send data functionalities tests', () => {
 
   test('a valid blog can be added', async () => {
-    const newBlog = {
-      title: "Dummy blog",
-      author: "Dummy author",
-      url: "http//DummySite.com",
+
+    const validBlog = {
+      title: "Valid blog",
+      author: "Valid author",
+      url: "http//ValidSite.com",
       likes: 444
     }
 
     await api.post('/api/blogs')
-      .send(newBlog)
+      .set({ Authorization: `Bearer ${token}` })
+      .send(validBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -61,14 +66,16 @@ describe('Send data functionalities tests', () => {
   })
 
   test('if a blog is added without the likes property, must be 0 by default', async () => {
-    const newBlog = {
+
+    const blogWithoutLikes = {
       title: "Recipes blog",
       author: "Chef Mark",
       url: "http//ForDinner.com"
     }
 
     await api.post('/api/blogs')
-      .send(newBlog)
+      .set({ Authorization: `Bearer ${token}` })
+      .send(blogWithoutLikes)
       .expect(201)
 
     const blogs = await blogsInDb()
@@ -83,8 +90,28 @@ describe('Send data functionalities tests', () => {
     }
 
     await api.post('/api/blogs')
+      .set({ Authorization: `Bearer ${token}` })
       .send(invalidBlog)
       .expect(400)
+
+    const blogs = await blogsInDb()
+
+    expect(blogs).toHaveLength(initialBlogs.length)
+  })
+
+  test('adding a blog fails with the status code 401 Unauthorized if a token is not provided', async () => {
+
+    const blogWithoutToken = {
+      title: "Dummy blog",
+      author: "Dummy author",
+      url: "http//DummySite.com",
+      likes: 401
+    }
+
+    await api.post('/api/blogs')
+      .send(blogWithoutToken)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
 
     const blogs = await blogsInDb()
 
@@ -100,7 +127,9 @@ describe('Delete data functionalities tests', () => {
 
     const blogToDelete = blogsBefore[0]
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: `Bearer ${token}` })
       .expect(204)
 
     const blogsAfter = await blogsInDb()
@@ -129,8 +158,9 @@ describe('Update data functionalities tests', () => {
     }
 
     await api.put(`/api/blogs/${blogToUpdate.id}`)
+      .set({ Authorization: `Bearer ${token}` })
       .send(updates)
-      expect(200)
+      .expect(200)
 
     const blogsAfter = await blogsInDb()
 
