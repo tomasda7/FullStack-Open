@@ -46,7 +46,19 @@ blogsRouter.post('/', async (req, res) => {
 blogsRouter.delete('/:id', async (req, res) => {
   const id = req.params.id
 
-  await Blog.findByIdAndRemove(id)
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+  const blog = await Blog.findById(id)
+
+  const user = await User.findById(decodedToken.id)
+
+  if(blog.user.toString() !== user.id.toString()) {
+    return res.status(401).json({
+      error: 'this blog is owned by another user '
+    })
+  }
+
+  await Blog.findByIdAndRemove(blog.id)
 
   res.status(204).end()
 })
