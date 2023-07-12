@@ -13,11 +13,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [isError, setIsError] = useState(false)
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
-  })
+
 
   useEffect( () => {
     const fetchBlogs = async () => {
@@ -68,27 +64,10 @@ const App = () => {
     window.location.reload()
   }
 
-  const handleNewBlog = (e) => {
-    const value = e.target.value
-    setNewBlog({
-      ...newBlog,
-      [e.target.name]: value
-    })
-  }
-
-  const addBlog = async (e) => {
-    e.preventDefault()
-
-    const blogObj = {
-      title: newBlog.title,
-      author: newBlog.author,
-      url: newBlog.url
-    }
-
+  const addBlog = async (blogObj) => {
     try {
       const newBlog = await blogService.create(blogObj)
       setBlogs(blogs.concat(newBlog))
-      setNewBlog({ title: '', author: '', url: '' })
       setMessage(`a new blog "${newBlog.title}" by ${user.username} was added successfully`)
       setTimeout(() => {
         setMessage(null)
@@ -145,9 +124,7 @@ const App = () => {
 
       <Togglable buttonLabel='new blog'>
         <BlogForm
-          onSubmit={addBlog}
-          value={newBlog}
-          onChange={handleNewBlog}
+          createBlog={addBlog}
         />
       </Togglable>
 
