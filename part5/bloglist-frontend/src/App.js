@@ -15,13 +15,13 @@ const App = () => {
   const [isError, setIsError] = useState(false)
 
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchBlogs = async () => {
       const initalBlogs = await blogService.getAll()
       setBlogs(initalBlogs)
     }
     fetchBlogs()
-  }, [])
+  }, [message])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -56,7 +56,6 @@ const App = () => {
         setMessage(null)
       }, 5000)
     }
-
   }
 
   const handleLogout = () => {
