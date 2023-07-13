@@ -82,6 +82,34 @@ const App = () => {
     }
   }
 
+  const addLike = async (id) => {
+    try {
+      const blogToLike = blogs.find(blog => blog.id === id)
+
+      const blogObj = {
+        ...blogToLike,
+        likes: blogToLike.likes + 1
+      }
+
+      const likedBlog = await blogService.update(id, blogObj)
+      setBlogs(blogs.map(blog =>
+        blog.id !== blogToLike.id ? blog : likedBlog))
+        setMessage(`you have liked the blog "${likedBlog.title}"`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+    } catch (error) {
+      setIsError(true)
+      setMessage(error.response.data.error)
+      setTimeout(() => {
+        setMessage(null)
+        setIsError(false)
+      }, 5000)
+    }
+  }
+
+  const sortedBlogs = blogs.sort((a,b) => b.likes - a.likes)
+
   if(user === null) {
     return (
       <div>
@@ -127,8 +155,8 @@ const App = () => {
         />
       </Togglable>
 
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} likeHandler={addLike} />
       )}
     </div>
   )
