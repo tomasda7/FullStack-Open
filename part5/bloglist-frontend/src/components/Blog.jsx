@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useState } from 'react'
+import DeleteButton from './DeleteButton'
 
-const Blog = ({blog, likeHandler, deleteHandler}) => {
+const Blog = ({ blog, likeHandler, deleteHandler, userId }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -24,13 +25,16 @@ const Blog = ({blog, likeHandler, deleteHandler}) => {
         <h4>{blog.title} {blog.author}</h4>
       </div>
       <div style={showWhenVisible}>
-        <h4>{blog.title} {blog.author}</h4>
-        <p>{blog.url}</p>
-        <p>{blog.likes}</p> <button key={blog.id} onClick={() => likeHandler(blog.id)}>like</button>
-        <p>By {blog.user.name}</p>
-        <div>
-        <button key={blog.id} onClick={() => deleteHandler(blog.id)}>delete</button>
-        </div>
+        <h3>{blog.title} {blog.author}</h3>
+        <h4>{blog.url}</h4>
+        <h4>{blog.likes}</h4> <button key={blog.id} onClick={() => likeHandler(blog.id)}>like</button>
+        <h4>By {blog.user.name}</h4>
+        <DeleteButton
+          blogId={blog.id}
+          ownerId={blog.user.id}
+          userId={userId}
+          handleDelete={deleteHandler}
+        />
       </div>
       <div>
         <button onClick={changeVisibility}>{showDetail ? 'hide' : 'view'}</button>

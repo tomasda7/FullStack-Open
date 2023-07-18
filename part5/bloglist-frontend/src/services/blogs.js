@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
-let token;
+let token = null
 
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`
@@ -9,7 +9,7 @@ const setToken = (newToken) => {
 
 const getAll = async () => {
   const request = await axios.get(baseUrl)
-  return request.data;
+  return request.data
 }
 
 const create = async (newObj) => {
@@ -35,5 +35,5 @@ const remove = async (id) => {
   return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
+
 export default { getAll, create, update, remove, setToken }
