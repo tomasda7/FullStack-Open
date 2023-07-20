@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-test('a blog renders only the blogs title and author', () => {
+test('a blog renders only the blogs title and author by default', () => {
 
   const blog = {
     title: 'Test render',
@@ -47,5 +47,29 @@ test('the blogs URL and number of likes are shown when the button show has been 
     expect(url).toBeDefined()
     expect(likes).toBeDefined()
   })
+
+test('clicking the blogs like button twice calls the event handler twice', async () => {
+
+  const blog = {
+    title: 'Test render',
+    author: 'Tomas',
+    url: 'http//tomasblog.com',
+    likes: 222
+  }
+
+  const mockHandler = jest.fn()
+
+  render(<Blog blog={blog} likeHandler={mockHandler}/>)
+
+  const user = userEvent.setup()
+  const buttonShow = screen.getByText('show')
+  await user.click(buttonShow)
+
+  const buttonLike = screen.getByText('like')
+  await user.click(buttonLike)
+  await user.click(buttonLike)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
 
 //$env:CI=$true; npm test
