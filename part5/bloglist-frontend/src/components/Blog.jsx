@@ -12,7 +12,6 @@ const Blog = ({ blog, likeHandler, deleteHandler, userId }) => {
 
   const [showDetail, setShowDetail] = useState(false)
 
-
   const changeVisibility = () => {
     setShowDetail(!showDetail)
   }
@@ -43,7 +42,7 @@ const Blog = ({ blog, likeHandler, deleteHandler, userId }) => {
         }
       </div>
       <div>
-        <button onClick={changeVisibility}>{showDetail ? 'hide' : 'view'}</button>
+        <button onClick={changeVisibility}>{showDetail ? 'hide' : 'show'}</button>
       </div>
     </div>
   )
