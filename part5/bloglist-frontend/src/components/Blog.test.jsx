@@ -11,7 +11,11 @@ describe('<Blog /> tests', () => {
       title: 'Test render',
       author: 'Tomas',
       url: 'http//tomasblog.com',
-      likes: 222
+      likes: 222,
+      user: {
+        id: '23232323',
+        name: 'Test'
+      }
     }
 
     render(<Blog blog={blog}/>)
@@ -34,7 +38,11 @@ describe('<Blog /> tests', () => {
         title: 'Test render',
         author: 'Tomas',
         url: 'http//tomasblog.com',
-        likes: 222
+        likes: 222,
+        user: {
+          id: '23232323',
+          name: 'Test'
+        }
       }
 
       render(<Blog blog={blog} />)
@@ -56,7 +64,11 @@ describe('<Blog /> tests', () => {
       title: 'Test render',
       author: 'Tomas',
       url: 'http//tomasblog.com',
-      likes: 222
+      likes: 222,
+      user: {
+        id: '23232323',
+        name: 'Test'
+      }
     }
 
     const mockHandler = jest.fn()

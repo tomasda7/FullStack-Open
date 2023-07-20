@@ -31,10 +31,10 @@ const Blog = ({ blog, likeHandler, deleteHandler, userId }) => {
                likeHandler(blog.id)}>
             like
            </button>
-           {/* <h4>By {blog.user.name}</h4> */}
+           {<h4>By {blog.user.name}</h4> }
            <DeleteButton
              blogId={blog.id}
-             /* ownerId={blog.user.id} */
+             ownerId={blog.user.id}
              userId={userId}
              handleDelete={deleteHandler}
            />
