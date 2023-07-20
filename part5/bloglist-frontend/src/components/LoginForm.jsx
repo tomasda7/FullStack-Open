@@ -5,35 +5,34 @@ const LoginForm = ({
   username,
   password,
   handleUsernameChange,
-  handlePasswordChange
-  }) => {
+  handlePasswordChange }) => {
   return (
     <div>
-        <h2>Log in</h2>
+      <h2>Log in</h2>
 
-        <form onSubmit={ handleSubmit }>
-          <div>
+      <form onSubmit={ handleSubmit }>
+        <div>
             username:
-            <input
+          <input
             type='text'
             value={ username }
             autoComplete='username'
             name='Username'
             onChange={ handleUsernameChange }
-            />
-          </div>
-          <div>
+          />
+        </div>
+        <div>
             password:
-            <input
+          <input
             type='password'
             value={ password }
             autoComplete='current-password'
             name='Password'
             onChange={ handlePasswordChange }
-            />
-          </div>
-          <button type='submit'>login</button>
-        </form>
+          />
+        </div>
+        <button type='submit'>login</button>
+      </form>
     </div>
   )
 }
