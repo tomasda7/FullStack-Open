@@ -60,5 +60,18 @@ describe('Blog app', function() {
       cy.contains('Cypress')
       cy.contains('https://www.cypress.io/')
     })
+
+    it('users can like a blog', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('blog created by cypress')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('https://www.cypress.io/')
+      cy.contains('Save').click()
+
+      cy.contains('show').click()
+      cy.contains(0)
+      cy.contains('like').click()
+      cy.contains(1)
+    })
   })
 })
