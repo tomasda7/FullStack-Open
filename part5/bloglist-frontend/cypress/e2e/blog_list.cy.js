@@ -73,5 +73,23 @@ describe('Blog app', function() {
       cy.contains('like').click()
       cy.contains(1)
     })
+
+    it('the user who created a blog can delete it', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('blog created by cypress')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('https://www.cypress.io/')
+      cy.contains('Save').click()
+
+      cy.contains('show').click()
+      cy.contains('remove').click()
+
+      cy.get('.success').should('contain', 'blog created by cypress was deleted successfully!')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
+        .and('have.css', 'border-style', 'solid')
+
+      cy.contains('Cypress').should('not.exist')
+      cy.contains('https://www.cypress.io/').should('not.exist')
+    })
   })
 })
