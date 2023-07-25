@@ -6,7 +6,13 @@ describe('Blog app', function() {
       name: 'Tomas Keane',
       password: 'testing'
     }
+    const user2 = {
+      username: 'tomas',
+      name: 'Manuel Ginobilli',
+      password: 'leston'
+    }
     cy.request('POST', 'http://localhost:3003/api/users', user)
+    cy.request('POST', 'http://localhost:3003/api/users', user2)
     cy.visit('http://localhost:3000')
   })
 
@@ -90,6 +96,27 @@ describe('Blog app', function() {
 
       cy.contains('Cypress').should('not.exist')
       cy.contains('https://www.cypress.io/').should('not.exist')
+    })
+
+    it('only the creator can see the delete button of a blog', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('blog created by cypress')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('https://www.cypress.io/')
+      cy.contains('Save').click()
+
+      cy.contains('show').click()
+      cy.contains('remove')
+
+      cy.contains('logout').click()
+
+      cy.contains('log in').click()
+      cy.get('#username').type('tomas')
+      cy.get('#password').type('leston')
+      cy.get('#login-button').click()
+
+      cy.contains('show').click()
+      cy.contains('remove').should('not.exist')
     })
   })
 })
