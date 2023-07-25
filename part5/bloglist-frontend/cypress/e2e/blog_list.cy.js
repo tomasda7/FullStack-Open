@@ -39,4 +39,26 @@ describe('Blog app', function() {
       cy.contains('Tomas Keane logged in').should('not.exist')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.contains('log in').click()
+      cy.get('#username').type('cypress')
+      cy.get('#password').type('testing')
+      cy.get('#login-button').click()
+    })
+
+    it('a blog can be created', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('blog created by cypress')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('https://www.cypress.io/')
+      cy.contains('Save').click()
+
+      cy.contains('show').click()
+      cy.contains('blog created by cypress')
+      cy.contains('Cypress')
+      cy.contains('https://www.cypress.io/')
+    })
+  })
 })
