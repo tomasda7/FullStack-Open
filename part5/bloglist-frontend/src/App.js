@@ -73,7 +73,7 @@ const App = () => {
       const newBlog = await blogService.create(blogObj)
       setBlogs(blogs.concat({ ...newBlog, user: user }))
       blogFormRef.current.toggleVisibility()
-      setMessage(`a new blog "${newBlog.title}" by ${user.username} was added successfully`)
+      setMessage(`"${newBlog.title}" by ${user.username} was added successfully`)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -100,10 +100,6 @@ const App = () => {
       const likedBlog = await blogService.update(id, blogObj)
       setBlogs(blogs.map(blog =>
         blog.id !== blogToLike.id ? blog : { ...likedBlog, user: user }))
-      setMessage(`you have liked the blog "${likedBlog.title}"`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
     } catch (error) {
       setIsError(true)
       setMessage(error.response.data.error)

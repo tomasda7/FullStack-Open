@@ -24,6 +24,7 @@ describe('Blog app', function() {
 
   describe('Login', function() {
     it('succeeds with correct credentials', function() {
+
       cy.contains('log in').click()
       cy.get('#username').type('cypress')
       cy.get('#password').type('testing')
@@ -117,6 +118,41 @@ describe('Blog app', function() {
 
       cy.contains('show').click()
       cy.contains('remove').should('not.exist')
+    })
+
+    it('blogs are ordered by the number of likes from most to less', function() {
+      cy.contains('new blog').click()
+      cy.get('#title').type('this blog must be second')
+      cy.get('#author').type('Cypress')
+      cy.get('#url').type('https://www.cypress.io/')
+      cy.contains('Save').click()
+
+      cy.contains('show').click()
+      cy.contains('like').click()
+      cy.contains(1)
+      cy.contains('like').click()
+      cy.contains(2)
+      cy.contains('hide').click()
+
+      cy.contains('new blog').click()
+      cy.get('#title').type('this blog must be first')
+      cy.get('#author').type('Leston')
+      cy.get('#url').type('https://www.tomasRules.com')
+      cy.contains('Save').click()
+
+      cy.contains('Leston')
+
+      cy.get('button:last').click()
+      cy.contains('like').click()
+      cy.contains(1)
+      cy.contains('like').click()
+      cy.contains(2)
+      cy.contains('like').click()
+      cy.contains(3)
+      cy.contains('hide').click()
+
+      cy.get('.blog').eq(0).should('contain', 'this blog must be first')
+      cy.get('.blog').eq(1).should('contain', 'this blog must be second')
     })
   })
 })
