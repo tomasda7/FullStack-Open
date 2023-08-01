@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { filterChange } from '../reducers/filterReducer'
+import { byContent } from '../reducers/filterReducer'
 
 const Filter = () => {
   const dispatch = useDispatch()
@@ -7,7 +7,7 @@ const Filter = () => {
   const handleChange = (e) => {
     e.preventDefault()
     const text = e.target.value
-    dispatch(filterChange(text))
+    dispatch(byContent(text))
   }
 
   const style = {
