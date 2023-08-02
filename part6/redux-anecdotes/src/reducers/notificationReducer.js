@@ -8,11 +8,11 @@ const notificationSlice = createSlice({
   reducers: {
     showMessage(state, action) {
       state = action.payload
-        return state
+      return state
     },
     hideMessage(state, action) {
       state = null
-        return state
+      return state
     }
   }
 })
