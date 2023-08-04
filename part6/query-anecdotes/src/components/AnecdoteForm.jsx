@@ -8,9 +8,20 @@ const AnecdoteForm = () => {
 
   const queryClient = useQueryClient()
 
-  const newAnecdoteMutation = useMutation(createNew, {
+  const createMutation = useMutation(createNew, {
     onSuccess: () => {
       queryClient.invalidateQueries('anecdotes')
+    },
+    onError: (error) => {
+      if(error.response) {
+        const serverError = error.response.data
+        if(serverError.error === 'too short anecdote, must have length 5 or more') {
+          messageDispatch({ type: 'SHOW', payload: `${serverError.error}` })
+          setTimeout(() => {
+          messageDispatch({ type: 'HIDE' })
+          }, 5000)
+        }
+      }
     }
   })
 
@@ -18,7 +29,7 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({
+    createMutation.mutate({
       content: content,
       votes: 0
     })
