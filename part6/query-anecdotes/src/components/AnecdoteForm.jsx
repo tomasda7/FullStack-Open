@@ -1,7 +1,11 @@
 import { useMutation, useQueryClient } from "react-query"
 import { createNew } from "../request"
+import { useContext } from "react"
+import AnecdotesContext from "../AnecdotesContext"
 
 const AnecdoteForm = () => {
+  const [message, messageDispatch] = useContext(AnecdotesContext)
+
   const queryClient = useQueryClient()
 
   const newAnecdoteMutation = useMutation(createNew, {
@@ -18,7 +22,13 @@ const AnecdoteForm = () => {
       content: content,
       votes: 0
     })
-}
+
+    messageDispatch({ type: 'SHOW', payload: `"${content}" created successfully!` })
+    console.log(message)
+    setTimeout(() => {
+      messageDispatch({ type: 'HIDE' })
+    }, 5000)
+  }
 
   return (
     <div>
