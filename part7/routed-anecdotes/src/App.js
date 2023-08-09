@@ -28,11 +28,12 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = ({ anecdote }) => {
+const Anecdote = ({ anecdote, handleVote}) => {
   return (
     <>
       <h2>{anecdote.content} by {anecdote.author}</h2>
       <div>has {anecdote.votes} votes</div>
+      <button onClick={() => handleVote(anecdote.id)}>vote</button>
       <div>for more info visit <a href={`${anecdote.info}`}>{anecdote.info}</a></div>
     </>
   )
@@ -144,7 +145,7 @@ const App = () => {
     },5000)
   }
 
-/*   const anecdoteById = (id) =>
+ const anecdoteById = (id) =>
     anecdotes.find(a => a.id === id)
 
   const vote = (id) => {
@@ -156,7 +157,7 @@ const App = () => {
     }
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  } */
+  }
 
   const match = useMatch('/anecdotes/:id')
 
@@ -173,7 +174,7 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path='/anecdotes/:id' element={ <Anecdote anecdote={anecdote} /> }/>
+        <Route path='/anecdotes/:id' element={ <Anecdote anecdote={anecdote} handleVote={vote} /> }/>
         <Route path='/about' element={ <About /> }/>
         <Route path='/create' element={ <CreateNew addNew={addNew}/> }/>
         <Route path='/' element={ <AnecdoteList anecdotes={anecdotes} /> }/>
