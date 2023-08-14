@@ -28,7 +28,7 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 )
 
-const Anecdote = ({ anecdote, handleVote}) => {
+const Anecdote = ({ anecdote, handleVote }) => {
   return (
     <>
       <h2>{anecdote.content} by {anecdote.author}</h2>
@@ -145,7 +145,7 @@ const App = () => {
     },5000)
   }
 
- const anecdoteById = (id) =>
+  const anecdoteById = (id) =>
     anecdotes.find(a => a.id === id)
 
   const vote = (id) => {
