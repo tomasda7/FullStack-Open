@@ -27,6 +27,9 @@ const App = () => {
   }, [dispatch])
 
   const blogs = useSelector((state) => state.blogs)
+  const sortedBlogs = [...blogs].sort(
+    (blogA, blogB) => blogB.likes - blogA.likes
+  )
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -136,7 +139,7 @@ const App = () => {
             <BlogForm createBlog={addBlog} />
           </Togglable>
 
-          {blogs.map((blog) => (
+          {sortedBlogs.map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}
