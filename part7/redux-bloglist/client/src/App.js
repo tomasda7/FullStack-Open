@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  initalizeBlogs,
+  createBlog,
+  likeBlog,
+  removeBlog
+} from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
+import { setToken } from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -19,12 +23,10 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const initalBlogs = await blogService.getAll()
-      setBlogs(initalBlogs)
-    }
-    fetchBlogs()
-  }, [])
+    dispatch(initalizeBlogs())
+  }, [dispatch])
+
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -45,7 +47,7 @@ const App = () => {
         password
       })
 
-      blogService.setToken(user.token)
+      setToken(user.token)
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
 
@@ -64,12 +66,11 @@ const App = () => {
 
   const addBlog = async (blogObj) => {
     try {
-      const newBlog = await blogService.create(blogObj)
-      setBlogs(blogs.concat({ ...newBlog, user: user }))
+      dispatch(createBlog(blogObj, user))
       blogFormRef.current.toggleVisibility()
       dispatch(
         setNotification(
-          `"${newBlog.title}" by ${user.username} was added successfully`,
+          `"${blogObj.title}" by ${user.username} was added successfully`,
           'success',
           5
         )
@@ -81,19 +82,7 @@ const App = () => {
 
   const addLike = async (id) => {
     try {
-      const blogToLike = blogs.find((blog) => blog.id === id)
-
-      const blogObj = {
-        ...blogToLike,
-        likes: blogToLike.likes + 1
-      }
-
-      const likedBlog = await blogService.update(id, blogObj)
-      setBlogs(
-        blogs.map((blog) =>
-          blog.id !== blogToLike.id ? blog : { ...likedBlog, user: user }
-        )
-      )
+      dispatch(likeBlog(id, user))
     } catch (error) {
       dispatch(setNotification(error.response.data.error, 'error', 5))
     }
@@ -107,8 +96,7 @@ const App = () => {
           `Are you sure to delete the blog "${confirmBlog.title}"?`
         )
       ) {
-        await blogService.remove(id)
-        setBlogs(blogs.filter((blog) => blog.id !== id))
+        dispatch(removeBlog(id))
         dispatch(
           setNotification(
             `${confirmBlog.title} was deleted successfully!`,
@@ -121,8 +109,6 @@ const App = () => {
       dispatch(setNotification(error.response.data.error, 'error', 5))
     }
   }
-
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
@@ -150,7 +136,7 @@ const App = () => {
             <BlogForm createBlog={addBlog} />
           </Togglable>
 
-          {sortedBlogs.map((blog) => (
+          {blogs.map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}
