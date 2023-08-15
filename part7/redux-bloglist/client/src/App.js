@@ -6,19 +6,17 @@ import {
   likeBlog,
   removeBlog
 } from './reducers/blogReducer'
+import { getLoggedUser, logIn } from './reducers/userReducer'
 import { setNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
-import { setToken } from './services/blogs'
-import loginService from './services/login'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -32,12 +30,10 @@ const App = () => {
   )
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
+    dispatch(getLoggedUser())
+  }, [dispatch])
+
+  const user = useSelector((state) => state.user)
 
   const blogFormRef = useRef()
 
@@ -45,16 +41,8 @@ const App = () => {
     e.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username,
-        password
-      })
+      dispatch(logIn(username, password))
 
-      setToken(user.token)
-
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-
-      setUser(user)
       setUsername('')
       setPassword('')
     } catch (error) {
