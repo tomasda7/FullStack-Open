@@ -4,7 +4,7 @@ import { login } from '../services/login'
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: null,
+  initialState: {},
   reducers: {
     setUser(state, action) {
       state = action.payload
