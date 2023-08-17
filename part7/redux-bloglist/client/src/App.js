@@ -39,8 +39,8 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>Blogs App</h2>
+    <div className="container">
+      <h1>Blog App</h1>
 
       <Notification />
 

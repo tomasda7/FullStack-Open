@@ -66,6 +66,8 @@ const BlogsList = () => {
 
   return (
     <div>
+      <h2>Blogs</h2>
+
       <p>{user.name} logged in</p>
       <LogoutButton />
 

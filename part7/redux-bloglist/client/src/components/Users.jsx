@@ -1,9 +1,10 @@
 import { useSelector } from 'react-redux'
-import LogoutButton from './LogoutButton'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { getLoggedUser } from '../reducers/userReducer'
 import { getUsers } from '../reducers/usersReducer'
+import { Table } from 'react-bootstrap'
+import LogoutButton from './LogoutButton'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -20,7 +21,25 @@ const Users = () => {
     <>
       <p>{user.name} logged in</p>
       <LogoutButton />
-      <p>users</p>
+
+      <h2>Users</h2>
+
+      <Table bordered hover variant="dark">
+        <thead>
+          <tr>
+            <th>Fullname</th>
+            <th>Blogs created</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.name}</td>
+              <td>{user.blogs.length}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </>
   )
 }
