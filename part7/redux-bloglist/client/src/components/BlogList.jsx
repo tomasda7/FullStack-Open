@@ -5,7 +5,7 @@ import BlogForm from './BlogForm'
 import Blog from './Blog'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
-import LogoutButton from './LogoutButton'
+import LoginInfo from './LoginInfo'
 
 const BlogsList = () => {
   const dispatch = useDispatch()
@@ -66,10 +66,9 @@ const BlogsList = () => {
 
   return (
     <div>
-      <h2>Blogs</h2>
+      <LoginInfo />
 
-      <p>{user.name} logged in</p>
-      <LogoutButton />
+      <h2>Blogs</h2>
 
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />

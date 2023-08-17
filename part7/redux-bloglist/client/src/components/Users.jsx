@@ -1,40 +1,31 @@
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { getLoggedUser } from '../reducers/userReducer'
-import { getUsers } from '../reducers/usersReducer'
 import { Table } from 'react-bootstrap'
-import LogoutButton from './LogoutButton'
+import LoginInfo from './LoginInfo'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(getUsers())
-    dispatch(getLoggedUser())
-  }, [dispatch])
-
-  const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
   console.log(users)
+
   return (
     <>
-      <p>{user.name} logged in</p>
-      <LogoutButton />
+      <LoginInfo />
 
       <h2>Users</h2>
 
       <Table bordered hover variant="dark">
         <thead>
           <tr>
-            <th>Fullname</th>
+            <th>Name</th>
             <th>Blogs created</th>
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}
