@@ -1,48 +1,70 @@
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import DeleteButton from './DeleteButton'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import LoginInfo from './LoginInfo'
 
-const Blog = ({ blog, likeHandler, deleteHandler, userId }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.user)
+  const blogs = useSelector((state) => state.blogs)
+
+  const addLike = async (id) => {
+    try {
+      dispatch(likeBlog(id, user))
+    } catch (error) {
+      dispatch(setNotification(error.response.data.error, 'error', 5))
+    }
   }
 
-  const [showDetail, setShowDetail] = useState(false)
+  const deleteBlog = async (id) => {
+    try {
+      const confirmBlog = blogs.find((blog) => blog.id === id)
+      if (
+        window.confirm(
+          `Are you sure to delete the blog "${confirmBlog.title}"?`
+        )
+      ) {
+        dispatch(removeBlog(id))
+        dispatch(
+          setNotification(
+            `${confirmBlog.title} was deleted successfully!`,
+            'success',
+            5
+          )
+        )
+      }
+    } catch (error) {
+      dispatch(setNotification(error.response.data.error, 'error', 5))
+    }
+  }
 
-  const changeVisibility = () => {
-    setShowDetail(!showDetail)
+  if (!blog) {
+    return null
   }
 
   return (
-    <div style={blogStyle} className='blog'>
+    <div className="blog">
+      <LoginInfo />
+
+      <h2>Blogs</h2>
       <div>
-        <h4>{blog.title}</h4>
-        <h4>{blog.author}</h4>
-        {showDetail &&
-         <div>
-           <h4>{blog.url}</h4>
-           <h4>{blog.likes}</h4>
-           <button
-             key={blog.id}
-             onClick={() =>
-               likeHandler(blog.id)}>
-            like
-           </button>
-           {<h4>By {blog.user.name}</h4> }
-           <DeleteButton
-             blogId={blog.id}
-             ownerId={blog.user.id}
-             userId={userId}
-             handleDelete={deleteHandler}
-           />
-         </div>
-        }
-      </div>
-      <div>
-        <button onClick={changeVisibility}>{showDetail ? 'hide' : 'show'}</button>
+        <h3>
+          {blog.title} {blog.author}
+        </h3>
+        <a href={blog.url}>{blog.url}</a>
+        <h4>{blog.likes} likes</h4>
+        <button key={blog.id} onClick={() => addLike(blog.id)}>
+          like
+        </button>
+        <h4>By {blog.user.name}</h4>
+        <DeleteButton
+          blogId={blog.id}
+          ownerId={blog.user.id}
+          userId={user.id}
+          handleDelete={deleteBlog}
+        />
       </div>
     </div>
   )

@@ -2,19 +2,28 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useRef } from 'react'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
-import Blog from './Blog'
 import { setNotification } from '../reducers/notificationReducer'
-import { createBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 import LoginInfo from './LoginInfo'
+import { Link } from 'react-router-dom'
 
 const BlogsList = () => {
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  const listStyle = {
+    listStyleType: 'none'
+  }
+
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
 
   const blogs = useSelector((state) => state.blogs)
-  const sortedBlogs = [...blogs].sort(
-    (blogA, blogB) => blogB.likes - blogA.likes
-  )
 
   const blogFormRef = useRef()
 
@@ -34,36 +43,6 @@ const BlogsList = () => {
     }
   }
 
-  const addLike = async (id) => {
-    try {
-      dispatch(likeBlog(id, user))
-    } catch (error) {
-      dispatch(setNotification(error.response.data.error, 'error', 5))
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      const confirmBlog = blogs.find((blog) => blog.id === id)
-      if (
-        window.confirm(
-          `Are you sure to delete the blog "${confirmBlog.title}"?`
-        )
-      ) {
-        dispatch(removeBlog(id))
-        dispatch(
-          setNotification(
-            `${confirmBlog.title} was deleted successfully!`,
-            'success',
-            5
-          )
-        )
-      }
-    } catch (error) {
-      dispatch(setNotification(error.response.data.error, 'error', 5))
-    }
-  }
-
   return (
     <div>
       <LoginInfo />
@@ -74,15 +53,13 @@ const BlogsList = () => {
         <BlogForm createBlog={addBlog} />
       </Togglable>
 
-      {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          userId={user ? user.id : user}
-          likeHandler={addLike}
-          deleteHandler={deleteBlog}
-        />
-      ))}
+      <ul style={listStyle}>
+        {blogs.map((blog) => (
+          <li style={blogStyle} key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

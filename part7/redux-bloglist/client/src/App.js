@@ -11,6 +11,7 @@ import Togglable from './components/Togglable'
 import Users from './components/Users'
 import BlogsList from './components/BlogList'
 import User from './components/User'
+import Blog from './components/Blog'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -41,10 +42,18 @@ const App = () => {
   }
 
   const users = useSelector((state) => state.users)
+  const blogs = useSelector((state) => state.blogs)
 
-  const match = useMatch('/users/:id')
+  const matchUser = useMatch('/users/:id')
+  const matchBlog = useMatch('/blogs/:id')
 
-  const user = match ? users.find((user) => user.id === match.params.id) : null
+  const user = matchUser
+    ? users.find((user) => user.id === matchUser.params.id)
+    : null
+
+  const blog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
+    : null
 
   return (
     <div className="container">
@@ -54,6 +63,7 @@ const App = () => {
 
       <Routes>
         <Route path="/users/:id" element={<User user={user} />} />
+        <Route path="blogs/:id" element={<Blog blog={blog} />} />
         <Route path="/users" element={<Users />} />
         <Route path="/blogs" element={<BlogsList />} />
         <Route
