@@ -3,6 +3,7 @@ import DeleteButton from './DeleteButton'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import LoginInfo from './LoginInfo'
+import Menu from './Menu'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -46,6 +47,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div className="blog">
+      <Menu />
       <LoginInfo />
 
       <h2>Blogs</h2>

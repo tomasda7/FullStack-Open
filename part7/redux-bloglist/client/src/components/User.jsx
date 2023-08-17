@@ -1,4 +1,5 @@
 import LoginInfo from './LoginInfo'
+import Menu from './Menu'
 
 const User = ({ user }) => {
   if (!user) {
@@ -7,6 +8,7 @@ const User = ({ user }) => {
 
   return (
     <>
+      <Menu />
       <LoginInfo />
 
       <div>

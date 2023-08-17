@@ -6,6 +6,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
 import LoginInfo from './LoginInfo'
 import { Link } from 'react-router-dom'
+import Menu from './Menu'
 
 const BlogsList = () => {
   const blogStyle = {
@@ -45,6 +46,7 @@ const BlogsList = () => {
 
   return (
     <div>
+      <Menu />
       <LoginInfo />
 
       <h2>Blogs</h2>

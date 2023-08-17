@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux'
 import { Table } from 'react-bootstrap'
-import LoginInfo from './LoginInfo'
 import { Link } from 'react-router-dom'
+import LoginInfo from './LoginInfo'
+import Menu from './Menu'
 
 const Users = () => {
   const users = useSelector((state) => state.users)
@@ -9,6 +10,7 @@ const Users = () => {
 
   return (
     <>
+      <Menu />
       <LoginInfo />
 
       <h2>Users</h2>
