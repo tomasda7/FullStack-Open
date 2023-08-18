@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog } from '../reducers/blogReducer'
+import { addNewComment, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import LoginInfo from './LoginInfo'
 import Menu from './Menu'
 
 const Blog = ({ blog }) => {
+  const [content, setContent] = useState('')
+
   const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
 
@@ -12,6 +15,16 @@ const Blog = ({ blog }) => {
     const blogOwner = blogs.find((blog) => blog.id === id)
     try {
       dispatch(likeBlog(id, blogOwner.user))
+    } catch (error) {
+      dispatch(setNotification(error.response.data.error, 'error', 5))
+    }
+  }
+
+  const sendComment = async (id) => {
+    const blogOwner = blogs.find((blog) => blog.id === id)
+    try {
+      dispatch(addNewComment(id, content, blogOwner.user))
+      setContent('')
     } catch (error) {
       dispatch(setNotification(error.response.data.error, 'error', 5))
     }
@@ -43,6 +56,13 @@ const Blog = ({ blog }) => {
             <li key={i}>{comment}</li>
           ))}
         </ul>
+        <div>
+          <input
+            type="text"
+            onChange={({ target }) => setContent(target.value)}
+          />
+          <button onClick={() => sendComment(blog.id)}>Add comment</button>
+        </div>
       </div>
     </div>
   )

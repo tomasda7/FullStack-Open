@@ -1,4 +1,4 @@
-import { getAll, create, update, remove } from '../services/blogs'
+import { getAll, create, update, remove, addComment } from '../services/blogs'
 import { createSlice } from '@reduxjs/toolkit'
 
 const blogSlice = createSlice({
@@ -54,6 +54,13 @@ export const likeBlog = (id, user) => {
         user: user
       })
     )
+  }
+}
+
+export const addNewComment = (id, content, user) => {
+  return async (dispatch) => {
+    const updBlog = await addComment(id, { content: content })
+    dispatch(updateBlog({ ...updBlog, user: user }))
   }
 }
 
