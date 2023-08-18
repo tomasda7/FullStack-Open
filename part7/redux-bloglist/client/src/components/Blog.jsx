@@ -1,41 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
-import DeleteButton from './DeleteButton'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import LoginInfo from './LoginInfo'
 import Menu from './Menu'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
-
-  const user = useSelector((state) => state.user)
   const blogs = useSelector((state) => state.blogs)
 
   const addLike = async (id) => {
+    const blogOwner = blogs.find((blog) => blog.id === id)
     try {
-      dispatch(likeBlog(id, user))
-    } catch (error) {
-      dispatch(setNotification(error.response.data.error, 'error', 5))
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      const confirmBlog = blogs.find((blog) => blog.id === id)
-      if (
-        window.confirm(
-          `Are you sure to delete the blog "${confirmBlog.title}"?`
-        )
-      ) {
-        dispatch(removeBlog(id))
-        dispatch(
-          setNotification(
-            `${confirmBlog.title} was deleted successfully!`,
-            'success',
-            5
-          )
-        )
-      }
+      dispatch(likeBlog(id, blogOwner.user))
     } catch (error) {
       dispatch(setNotification(error.response.data.error, 'error', 5))
     }
@@ -61,12 +37,12 @@ const Blog = ({ blog }) => {
           like
         </button>
         <h4>By {blog.user.name}</h4>
-        <DeleteButton
-          blogId={blog.id}
-          ownerId={blog.user.id}
-          userId={user.id}
-          handleDelete={deleteBlog}
-        />
+        <h3>Comments</h3>
+        <ul>
+          {blog.comments.map((comment, i) => (
+            <li key={i}>{comment}</li>
+          ))}
+        </ul>
       </div>
     </div>
   )
