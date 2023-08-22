@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux'
 import { addNewComment, likeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useField } from '../hooks'
+import { Button } from 'react-bootstrap'
 import LoginInfo from './LoginInfo'
 import Menu from './Menu'
 
@@ -32,6 +33,13 @@ const Blog = ({ blog }) => {
     return null
   }
 
+  const margin = {
+    marginLeft: 10
+  }
+  const background = {
+    backgroundColor: 'black'
+  }
+
   return (
     <div className="blog">
       <Menu />
@@ -42,16 +50,20 @@ const Blog = ({ blog }) => {
         <h3>
           {blog.title} {blog.author}
         </h3>
-        <a href={blog.url}>{blog.url}</a>
+        <a style={background} href={blog.url}>
+          {blog.url}
+        </a>
         <h4>{blog.likes} likes</h4>
-        <button key={blog.id} onClick={() => addLike(blog.id)}>
+        <Button key={blog.id} onClick={() => addLike(blog.id)} variant="dark">
           like
-        </button>
+        </Button>
         <h4>By {blog.user.name}</h4>
         <h3>Comments</h3>
         <form onSubmit={sendComment}>
           <input {...content} />
-          <button type="submit">Add comment</button>
+          <Button style={margin} type="submit" variant="dark">
+            Add comment
+          </Button>
         </form>
         <ul>
           {blog.comments.map((comment, i) => (

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Navbar, Nav } from 'react-bootstrap'
 
 const Menu = () => {
   const padding = {
@@ -6,14 +7,20 @@ const Menu = () => {
   }
 
   return (
-    <div>
-      <Link style={padding} to={'/blogs'}>
-        blogs
-      </Link>
-      <Link style={padding} to={'/users'}>
-        users
-      </Link>
-    </div>
+    <Navbar bg="dark" variant="dark">
+      <Nav className="me-auto">
+        <Nav.Link href="#" as="span">
+          <Link style={padding} to={'/blogs'}>
+            Blogs
+          </Link>
+        </Nav.Link>
+        <Nav.Link href="#" as="span">
+          <Link style={padding} to={'/users'}>
+            users
+          </Link>
+        </Nav.Link>
+      </Nav>
+    </Navbar>
   )
 }
 

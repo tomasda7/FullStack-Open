@@ -7,7 +7,6 @@ import { setNotification } from './reducers/notificationReducer'
 import { getUsers } from './reducers/usersReducer'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import Togglable from './components/Togglable'
 import Users from './components/Users'
 import BlogsList from './components/BlogList'
 import User from './components/User'
@@ -69,15 +68,13 @@ const App = () => {
         <Route
           path="/"
           element={
-            <Togglable buttonLabel="log in">
-              <LoginForm
-                handleSubmit={handleLogin}
-                username={username}
-                password={password}
-                handleUsernameChange={({ target }) => setUsername(target.value)}
-                handlePasswordChange={({ target }) => setPassword(target.value)}
-              />
-            </Togglable>
+            <LoginForm
+              handleSubmit={handleLogin}
+              username={username}
+              password={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+            />
           }
         />
       </Routes>

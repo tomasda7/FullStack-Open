@@ -10,8 +10,8 @@ import Menu from './Menu'
 
 const BlogsList = () => {
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
+    backgroundColor: 'black',
+    padding: 15,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5

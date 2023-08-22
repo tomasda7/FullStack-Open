@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog }) => {
   const [newBlog, setNewBlog] = useState({
@@ -27,24 +28,48 @@ const BlogForm = ({ createBlog }) => {
     setNewBlog({ title: '', author: '', url: '' })
   }
 
+  const margin = {
+    marginTop: 10,
+    marginLeft: 10
+  }
+
   return (
     <>
       <h2>Create a new blog</h2>
 
-      <form onSubmit={addBlog}>
-        <div>
-          Title: <input id='title' aria-label='Title' type='text' name='title' value={newBlog.title} onChange={handleNewBlog}/>
-        </div>
-        <div>
-          Author: <input id='author' aria-label='Author' type='text' name='author' value={newBlog.author} onChange={handleNewBlog}/>
-        </div>
-        <div>
-          URL: <input id='url' aria-label='Url' type='text' name='url' value={newBlog.url} onChange={handleNewBlog}/>
-        </div>
-        <div>
-          <button type='submit'>Save</button>
-        </div>
-      </form>
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>Title:</Form.Label>
+          <Form.Control
+            id="title"
+            type="text"
+            name="title"
+            value={newBlog.title}
+            onChange={handleNewBlog}
+          />
+          <Form.Label>Author:</Form.Label>
+          <Form.Control
+            id="author"
+            type="text"
+            name="author"
+            value={newBlog.author}
+            onChange={handleNewBlog}
+          />
+
+          <Form.Label>URL:</Form.Label>
+          <Form.Control
+            id="url"
+            aria-label="Url"
+            type="text"
+            name="url"
+            value={newBlog.url}
+            onChange={handleNewBlog}
+          />
+          <Button style={margin} variant="dark" type="submit">
+            Save
+          </Button>
+        </Form.Group>
+      </Form>
     </>
   )
 }
