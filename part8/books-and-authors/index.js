@@ -101,7 +101,18 @@ const typeDefs = `
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+  }
 `;
+
+const { v1: uuid } = require("uuid");
 
 const resolvers = {
   Query: {
@@ -109,14 +120,12 @@ const resolvers = {
     authorCount: () => authors.length,
     allBooks: (root, args) => {
       if (args.author && args.genre) {
-        console.log("author & genre");
         return books.filter(
           (book) =>
             book.author === args.author && book.genres.includes(args.genre)
         );
       }
       if (args.author) {
-        console.log("author");
         return books.filter((book) => book.author === args.author);
       }
       if (args.genre) {
@@ -132,6 +141,23 @@ const resolvers = {
           bookCount: books.filter((book) => book.author === author.name).length,
         };
       }),
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() };
+      books = books.concat(book);
+
+      const existsAuthor = authors
+        .map((author) => author.name)
+        .includes(args.author);
+
+      if (!existsAuthor) {
+        const newAuthor = { name: args.author, id: uuid() };
+        authors = authors.concat(newAuthor);
+      }
+
+      return book;
+    },
   },
 };
 
