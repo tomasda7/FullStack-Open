@@ -40,3 +40,12 @@ export const CREATE_BOOK = gql`
     }
   }
 `;
+
+export const SET_BIRTHYEAR = gql`
+  mutation setBirthyear($name: String!, $year: Int!) {
+    editAuthor(name: $name, setBorn: $year) {
+      name
+      born
+    }
+  }
+`;
