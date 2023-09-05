@@ -1,8 +1,7 @@
-const Authors = (props) => {
-  if (!props.show) {
-    return null
+const Authors = ({ show, authors }) => {
+  if (!show) {
+    return null;
   }
-  const authors = []
 
   return (
     <div>
@@ -10,7 +9,7 @@ const Authors = (props) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th>name</th>
             <th>born</th>
             <th>books</th>
           </tr>
@@ -24,7 +23,7 @@ const Authors = (props) => {
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Authors
+export default Authors;
