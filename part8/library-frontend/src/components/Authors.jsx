@@ -54,11 +54,16 @@ const Authors = ({ show }) => {
       <h2>set birth year</h2>
       <form onSubmit={updateBirthyear}>
         <div>
-          name:
-          <input
-            value={name}
+          <select
+            defaultValue={result.data.allAuthors[0]}
             onChange={({ target }) => setName(target.value)}
-          />
+          >
+            {result.data.allAuthors.map((a) => (
+              <option key={a.name} value={a.name}>
+                {a.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           born:
