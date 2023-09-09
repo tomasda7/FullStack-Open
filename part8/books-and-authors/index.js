@@ -23,19 +23,19 @@ mongoose
   });
 
 const typeDefs = `
+  type Author {
+    name: String!
+    id: ID!
+    born: Int
+    bookCount: Int
+  }
+
   type Book {
     title: String!
     published: Int!
     author: Author!
     genres: [String!]!
     id: ID!
-  }
-
-  type Author {
-    name: String!
-    id: ID!
-    born: Int
-    bookCount: Int!
   }
 
   type Query {
@@ -64,6 +64,12 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
+      if (args.genre) {
+        const byGenreFilter = await Book.find({ genres: args.genre });
+
+        return byGenreFilter;
+      }
+
       return Book.find({});
     },
     allAuthors: async () => {
@@ -72,13 +78,20 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const book = new Book({ ...args });
+      const author = new Author({ name: args.author });
+      //todo: validate existence of author and create if no exists
+
+      const book = new Book({
+        ...args,
+        author: await author.save(),
+      });
+
       return book.save();
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name });
-      author.born = args.born;
-      return author.save;
+      author.born = args.setBorn;
+      return author.save();
     },
   },
 };
