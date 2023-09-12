@@ -91,12 +91,15 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if (args.genre) {
-        const byGenreFilter = await Book.find({ genres: args.genre });
+        const byGenreFilter = await Book.find({ genres: args.genre }).populate(
+          "author",
+          { name: 1 }
+        );
 
         return byGenreFilter;
       }
 
-      return Book.find({});
+      return Book.find({}).populate("author", { name: 1 });
     },
     allAuthors: async () => {
       return Author.find({});
