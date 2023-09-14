@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../queries";
 import Menu from "./Menu";
 
-const NewBook = () => {
+const NewBook = ({ setToken }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -38,7 +38,7 @@ const NewBook = () => {
   return (
     <div>
       <h2>create a new book</h2>
-      <Menu />
+      <Menu setToken={setToken} />
 
       <form onSubmit={submit}>
         <div>

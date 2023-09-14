@@ -12,7 +12,7 @@ import { setContext } from "@apollo/client/link/context";
 import App from "./App";
 
 const authLink = setContext((_, { headers }) => {
-  const token = window.localStorage.getItem("books-user-token");
+  const token = window.localStorage.getItem("booksUserToken");
 
   return {
     headers: {
@@ -32,9 +32,9 @@ const client = new ApolloClient({
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ApolloProvider client={client}>
-    <Router>
+  <Router>
+    <ApolloProvider client={client}>
       <App />
-    </Router>
-  </ApolloProvider>
+    </ApolloProvider>
+  </Router>
 );

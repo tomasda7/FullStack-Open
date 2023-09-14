@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { ALL_BOOKS } from "../queries";
 import Menu from "./Menu";
 
-const Books = () => {
+const Books = ({ setToken }) => {
   const result = useQuery(ALL_BOOKS);
 
   if (result.loading) {
@@ -12,7 +12,7 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
-      <Menu />
+      <Menu setToken={setToken} />
 
       <table>
         <tbody>

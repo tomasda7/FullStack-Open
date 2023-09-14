@@ -1,14 +1,13 @@
 import { useApolloClient } from "@apollo/client";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Menu = () => {
+const Menu = ({ setToken }) => {
   const client = useApolloClient();
-  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.clear();
     client.resetStore(); //resets apollo client cache
-    navigate("/");
+    setToken(null);
   };
 
   return (

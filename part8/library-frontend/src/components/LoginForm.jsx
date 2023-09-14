@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../queries";
 
-const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ setToken }) => {
+  const [username, setUsername] = useState("Tomasda7");
+  const [password, setPassword] = useState("secretpass");
 
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
@@ -15,9 +15,10 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (result.data) {
+      console.log(result.data.login.value);
       const token = result.data.login.value;
-      console.log(token);
-      window.localStorage.setItem("books-user-token", token);
+      setToken(token);
+      window.localStorage.setItem("booksUserToken", token);
     }
   }, [result.data]); //eslint-disable-line
 
@@ -38,10 +39,8 @@ const LoginForm = () => {
         <div>
           username:
           <input
-            id="username"
             type="text"
             value={username}
-            autoComplete="username"
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
@@ -49,11 +48,8 @@ const LoginForm = () => {
         <div>
           password:
           <input
-            id="password"
             type="password"
             value={password}
-            autoComplete="current-password"
-            name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>

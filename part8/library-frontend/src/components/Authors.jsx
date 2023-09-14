@@ -3,7 +3,7 @@ import { ALL_AUTHORS, SET_BIRTHYEAR } from "../queries";
 import { useState } from "react";
 import Menu from "./Menu";
 
-const Authors = () => {
+const Authors = ({ setToken }) => {
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
 
@@ -31,7 +31,7 @@ const Authors = () => {
   return (
     <div>
       <h2>authors</h2>
-      <Menu />
+      <Menu setToken={setToken} />
 
       <table>
         <tbody>
