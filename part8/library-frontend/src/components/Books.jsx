@@ -1,12 +1,9 @@
 import { useQuery } from "@apollo/client";
 import { ALL_BOOKS } from "../queries";
+import Menu from "./Menu";
 
-const Books = ({ show }) => {
+const Books = () => {
   const result = useQuery(ALL_BOOKS);
-
-  if (!show) {
-    return null;
-  }
 
   if (result.loading) {
     return <div>Loading Books...</div>;
@@ -15,6 +12,7 @@ const Books = ({ show }) => {
   return (
     <div>
       <h2>books</h2>
+      <Menu />
 
       <table>
         <tbody>

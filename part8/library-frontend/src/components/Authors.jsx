@@ -1,8 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { ALL_AUTHORS, SET_BIRTHYEAR } from "../queries";
 import { useState } from "react";
+import Menu from "./Menu";
 
-const Authors = ({ show }) => {
+const Authors = () => {
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
 
@@ -11,10 +12,6 @@ const Authors = ({ show }) => {
   const [setBirthyear] = useMutation(SET_BIRTHYEAR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
-
-  if (!show) {
-    return null;
-  }
 
   if (result.loading) {
     return <div>Loading Authors...</div>;
@@ -34,6 +31,8 @@ const Authors = ({ show }) => {
   return (
     <div>
       <h2>authors</h2>
+      <Menu />
+
       <table>
         <tbody>
           <tr>
