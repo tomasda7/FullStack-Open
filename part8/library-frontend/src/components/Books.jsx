@@ -1,18 +1,71 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
+import { ALL_BOOKS, BOOKS_BYGENRE } from "../queries";
 import Menu from "./Menu";
+import { useState } from "react";
 
 const Books = ({ setToken }) => {
-  const result = useQuery(ALL_BOOKS);
+  const [selectedGenre, setSelectedGenre] = useState(null);
 
-  if (result.loading) {
+  const books = useQuery(ALL_BOOKS);
+
+  const byGenre = useQuery(BOOKS_BYGENRE, {
+    variables: { selectedGenre },
+    skip: !selectedGenre,
+  });
+
+  if (books.loading || byGenre.loading) {
     return <div>Loading Books...</div>;
+  }
+
+  const genres = books.data.allBooks.map((book) => book.genres).flat();
+
+  const uniqueGenres = [...new Set(genres)];
+  uniqueGenres.unshift("all");
+
+  if (selectedGenre !== "all" && byGenre.data) {
+    return (
+      <div>
+        <Menu setToken={setToken} />
+        <h2>books</h2>
+
+        <span>
+          in genre <strong>{selectedGenre}</strong>
+        </span>
+
+        <table>
+          <tbody>
+            <tr>
+              <th>title</th>
+              <th>author</th>
+              <th>published</th>
+            </tr>
+            {byGenre.data.allBooks.map((a) => (
+              <tr key={a.title}>
+                <td>{a.title}</td>
+                <td>{a.author.name}</td>
+                <td>{a.published}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div>
+          <select onChange={({ target }) => setSelectedGenre(target.value)}>
+            {uniqueGenres.map((genre, i) => (
+              <option key={i} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
-      <h2>books</h2>
       <Menu setToken={setToken} />
+      <h2>books</h2>
 
       <table>
         <tbody>
@@ -21,7 +74,7 @@ const Books = ({ setToken }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {result.data.allBooks.map((a) => (
+          {books.data.allBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -30,6 +83,16 @@ const Books = ({ setToken }) => {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <select onChange={({ target }) => setSelectedGenre(target.value)}>
+          {uniqueGenres.map((genre, i) => (
+            <option key={i} value={genre}>
+              {genre}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };

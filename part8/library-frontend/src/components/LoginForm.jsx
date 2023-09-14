@@ -15,9 +15,10 @@ const LoginForm = ({ setToken }) => {
 
   useEffect(() => {
     if (result.data) {
-      console.log(result.data.login.value);
       const token = result.data.login.value;
+
       setToken(token);
+
       window.localStorage.setItem("booksUserToken", token);
     }
   }, [result.data]); //eslint-disable-line

@@ -30,8 +30,8 @@ const Authors = ({ setToken }) => {
 
   return (
     <div>
-      <h2>authors</h2>
       <Menu setToken={setToken} />
+      <h2>authors</h2>
 
       <table>
         <tbody>
