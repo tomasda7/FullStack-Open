@@ -104,8 +104,16 @@ const resolvers = {
     allAuthors: async () => {
       return Author.find({});
     },
-    me: (root, args, context) => {
-      return context.currentUser;
+    me: async (root, args, context) => {
+      try {
+        return context.currentUser;
+      } catch (error) {
+        throw new GraphQLError("Invalid token or not authenticated user", {
+          extensions: {
+            code: "UNAUTHORIZED_USER",
+          },
+        });
+      }
     },
   },
   Mutation: {

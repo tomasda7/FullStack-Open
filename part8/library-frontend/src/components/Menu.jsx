@@ -21,6 +21,9 @@ const Menu = ({ setToken }) => {
       <Link to={"/newbook"}>
         <button type="button">new book</button>
       </Link>
+      <Link to={"/recommended"}>
+        <button type="button">recommended</button>
+      </Link>
       <button type="button" onClick={logout}>
         logout
       </button>

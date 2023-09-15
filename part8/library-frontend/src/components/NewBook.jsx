@@ -1,17 +1,35 @@
-import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from "../queries";
-import Menu from "./Menu";
+import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import {
+  ALL_AUTHORS,
+  ALL_BOOKS,
+  BOOKS_BYGENRE,
+  CREATE_BOOK,
+  USER_INFO,
+} from '../queries';
+import Menu from './Menu';
 
 const NewBook = ({ setToken }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [published, setPublished] = useState("");
-  const [genre, setGenre] = useState("");
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [published, setPublished] = useState('');
+  const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+    refetchQueries: [
+      { query: ALL_AUTHORS },
+      { query: ALL_BOOKS },
+      { query: USER_INFO },
+    ],
+    update: (cache, response) => {
+      cache.updateQuery({ query: BOOKS_BYGENRE }, ({ allBooks }) => {
+        console.log(response);
+        return {
+          allBooks: allBooks.concat(response.data.addBook),
+        };
+      });
+    },
   });
 
   const submit = async (event) => {
@@ -23,22 +41,22 @@ const NewBook = ({ setToken }) => {
       variables: { title, author, published: publishedToInt, genres },
     });
 
-    setTitle("");
-    setPublished("");
-    setAuthor("");
+    setTitle('');
+    setPublished('');
+    setAuthor('');
     setGenres([]);
-    setGenre("");
+    setGenre('');
   };
 
   const addGenre = () => {
     setGenres(genres.concat(genre));
-    setGenre("");
+    setGenre('');
   };
 
   return (
     <div>
-      <h2>create a new book</h2>
       <Menu setToken={setToken} />
+      <h2>create a new book</h2>
 
       <form onSubmit={submit}>
         <div>
@@ -72,7 +90,7 @@ const NewBook = ({ setToken }) => {
             add genre
           </button>
         </div>
-        <div>genres: {genres.join(" ")}</div>
+        <div>genres: {genres.join(' ')}</div>
         <button type="submit">create book</button>
       </form>
     </div>
