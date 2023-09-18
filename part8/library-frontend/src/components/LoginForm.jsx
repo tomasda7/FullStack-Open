@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../queries";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../queries';
 
 const LoginForm = ({ setToken }) => {
-  const [username, setUsername] = useState("Tomasda7");
-  const [password, setPassword] = useState("secretpass");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
@@ -16,10 +16,11 @@ const LoginForm = ({ setToken }) => {
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value;
+      console.log(token);
 
       setToken(token);
 
-      window.localStorage.setItem("booksUserToken", token);
+      window.localStorage.setItem('booksUserToken', token);
     }
   }, [result.data]); //eslint-disable-line
 
@@ -29,7 +30,7 @@ const LoginForm = ({ setToken }) => {
     e.preventDefault();
 
     login({ variables: { username, password } });
-    navigate("/authors");
+    navigate('/authors');
   };
 
   return (
@@ -42,7 +43,6 @@ const LoginForm = ({ setToken }) => {
           <input
             type="text"
             value={username}
-            name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>

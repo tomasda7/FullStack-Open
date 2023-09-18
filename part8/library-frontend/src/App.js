@@ -1,21 +1,17 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Authors from "./components/Authors";
-import Books from "./components/Books";
-import NewBook from "./components/NewBook";
-import LoginForm from "./components/LoginForm";
-import Recommended from "./components/Recommended";
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Authors from './components/Authors';
+import Books from './components/Books';
+import NewBook from './components/NewBook';
+import LoginForm from './components/LoginForm';
+import Recommended from './components/Recommended';
 
 const App = () => {
   const [token, setToken] = useState(null);
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
-  }, [token]); //eslint-disable-line
+  if (!token) {
+    return <LoginForm setToken={setToken} />;
+  }
 
   return (
     <div>

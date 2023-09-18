@@ -1,7 +1,7 @@
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS, BOOKS_BYGENRE } from "../queries";
-import Menu from "./Menu";
-import { useState } from "react";
+import { useQuery } from '@apollo/client';
+import { ALL_BOOKS, BOOKS_BYGENRE } from '../queries';
+import Menu from './Menu';
+import { useState } from 'react';
 
 const Books = ({ setToken }) => {
   const [selectedGenre, setSelectedGenre] = useState(null);
@@ -20,9 +20,9 @@ const Books = ({ setToken }) => {
   const genres = books.data.allBooks.map((book) => book.genres).flat();
 
   const uniqueGenres = [...new Set(genres)];
-  uniqueGenres.unshift("all");
+  uniqueGenres.unshift('all');
 
-  if (selectedGenre !== "all" && byGenre.data) {
+  if (selectedGenre !== 'all' && byGenre.data) {
     return (
       <div>
         <Menu setToken={setToken} />

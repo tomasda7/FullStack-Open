@@ -1,29 +1,29 @@
-const { ApolloServer } = require("@apollo/server");
-const { startStandaloneServer } = require("@apollo/server/standalone");
-const { GraphQLError } = require("graphql");
+const { ApolloServer } = require('@apollo/server');
+const { startStandaloneServer } = require('@apollo/server/standalone');
+const { GraphQLError } = require('graphql');
 
-const mongoose = require("mongoose");
-mongoose.set("strictQuery", false);
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
 
-const Book = require("./models/book");
-const Author = require("./models/author");
-const User = require("./models/user");
+const Book = require('./models/book');
+const Author = require('./models/author');
+const User = require('./models/user');
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-require("dotenv").config();
+require('dotenv').config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-console.log("connecting to", MONGODB_URI);
+console.log('connecting to', MONGODB_URI);
 
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    console.log("connected to MongoDB successfully");
+    console.log('connected to MongoDB successfully');
   })
   .catch((error) => {
-    console.log("error connection to MondoDB: ", error.message);
+    console.log('error connection to MondoDB: ', error.message);
   });
 
 const typeDefs = `
@@ -92,37 +92,29 @@ const resolvers = {
     allBooks: async (root, args) => {
       if (args.genre) {
         const byGenreFilter = await Book.find({ genres: args.genre }).populate(
-          "author",
+          'author',
           { name: 1 }
         );
 
         return byGenreFilter;
       }
 
-      return Book.find({}).populate("author", { name: 1 });
+      return Book.find({}).populate('author', { name: 1 });
     },
     allAuthors: async () => {
       return Author.find({});
     },
-    me: async (root, args, context) => {
-      try {
-        return context.currentUser;
-      } catch (error) {
-        throw new GraphQLError("Invalid token or not authenticated user", {
-          extensions: {
-            code: "UNAUTHORIZED_USER",
-          },
-        });
-      }
+    me: (root, args, context) => {
+      return context.currentUser;
     },
   },
   Mutation: {
     addBook: async (root, args, context) => {
       try {
         if (!context.currentUser) {
-          throw new GraphQLError("Invalid token or not authenticated user", {
+          throw new GraphQLError('Invalid token or not authenticated user', {
             extensions: {
-              code: "UNAUTHORIZED_USER",
+              code: 'UNAUTHORIZED_USER',
             },
           });
         }
@@ -148,9 +140,9 @@ const resolvers = {
 
         return book.save();
       } catch (error) {
-        throw new GraphQLError("Adding a new book failed", {
+        throw new GraphQLError('Adding a new book failed', {
           extensions: {
-            code: "BAD_USER_INPUT",
+            code: 'BAD_USER_INPUT',
             invalidArgs: args.title,
             error,
           },
@@ -159,9 +151,9 @@ const resolvers = {
     },
     editAuthor: async (root, args, context) => {
       if (!context.currentUser) {
-        throw new GraphQLError("Invalid token or not authenticated user", {
+        throw new GraphQLError('Invalid token or not authenticated user', {
           extensions: {
-            code: "UNAUTHORIZED_USER",
+            code: 'UNAUTHORIZED_USER',
           },
         });
       }
@@ -178,9 +170,9 @@ const resolvers = {
 
         return user.save();
       } catch (error) {
-        throw new GraphQLError("Creating a new user failed", {
+        throw new GraphQLError('Creating a new user failed', {
           extensions: {
-            code: "INVALID_USER_INPUT",
+            code: 'INVALID_USER_INPUT',
             invalidArgs: args,
             error,
           },
@@ -190,16 +182,16 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username });
 
-      if (!user || args.password !== "secretpass") {
-        throw new GraphQLError("Creating a new user failed", {
+      if (!user || args.password !== 'secretpass') {
+        throw new GraphQLError('Creating a new user failed', {
           extensions: {
-            code: "INVALID_USER_INPUT",
+            code: 'INVALID_USER_INPUT',
           },
         });
       }
 
       const userForToken = {
-        username: args.username,
+        username: user.username,
         id: user._id,
       };
 
@@ -218,7 +210,7 @@ startStandaloneServer(server, {
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null;
 
-    if (auth && auth.startsWith("Bearer ")) {
+    if (auth && auth.startsWith('Bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), process.env.SECRET);
 
       const currentUser = await User.findById(decodedToken.id);

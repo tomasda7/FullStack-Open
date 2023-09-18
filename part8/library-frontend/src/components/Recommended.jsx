@@ -1,19 +1,23 @@
-import { useEffect, useState } from "react";
-import Menu from "./Menu";
-import { BOOKS_BYGENRE, USER_INFO } from "../queries";
-import { useQuery } from "@apollo/client";
+import { useState, useEffect } from 'react';
+import Menu from './Menu';
+import { useQuery } from '@apollo/client';
+import { BOOKS_BYGENRE, USER_INFO } from '../queries';
 const Recommended = ({ setToken }) => {
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [favoriteGenre, setFavoriteGenre] = useState(null);
 
   const user = useQuery(USER_INFO);
 
-  useEffect(() => {
-    if (user.data) setSelectedGenre(user.data.me.favoriteGenre);
-  }, [user.data]);
-
   const byGenre = useQuery(BOOKS_BYGENRE, {
-    variables: { selectedGenre },
+    variables: { selectedGenre: favoriteGenre },
   });
+
+  useEffect(() => {
+    if (user.data) {
+      const genre = user.data.me.favoriteGenre;
+
+      setFavoriteGenre(genre);
+    }
+  }, [user.data]);
 
   if (byGenre.loading || user.loading) {
     return <div>Loading Books...</div>;
@@ -25,7 +29,7 @@ const Recommended = ({ setToken }) => {
       <h2>Recommendations</h2>
 
       <span>
-        books on your favorite genre <strong>{selectedGenre}</strong>
+        books on your favorite genre <strong>{favoriteGenre}</strong>
       </span>
 
       <table>
