@@ -4,8 +4,8 @@ import { useMutation } from '@apollo/client';
 import { LOGIN } from '../queries';
 
 const LoginForm = ({ setToken }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('Tomasda7');
+  const [password, setPassword] = useState('secretpass');
 
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
@@ -20,6 +20,7 @@ const LoginForm = ({ setToken }) => {
       setToken(token);
 
       window.localStorage.setItem('booksUserToken', token);
+      console.log('logged');
     }
   }, [result.data]); //eslint-disable-line
 

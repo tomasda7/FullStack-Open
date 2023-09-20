@@ -6,14 +6,17 @@ import NewBook from './components/NewBook';
 import LoginForm from './components/LoginForm';
 import Recommended from './components/Recommended';
 import { useSubscription } from '@apollo/client';
-import { BOOK_ADDED } from './queries';
+import { ALL_BOOKS, BOOK_ADDED } from './queries';
+import { updateCache } from './helpers';
 
 const App = () => {
   const [token, setToken] = useState(null);
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
-      window.alert(`A new book "${data.data.bookAdded.title}" was added.`);
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded;
+      window.alert(`A new book "${addedBook.title}" was added.`);
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
     },
   });
 
