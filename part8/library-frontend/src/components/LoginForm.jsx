@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../queries';
@@ -16,7 +16,6 @@ const LoginForm = ({ setToken }) => {
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value;
-      console.log(token);
 
       setToken(token);
 
@@ -30,6 +29,7 @@ const LoginForm = ({ setToken }) => {
     e.preventDefault();
 
     login({ variables: { username, password } });
+
     navigate('/authors');
   };
 
@@ -51,6 +51,7 @@ const LoginForm = ({ setToken }) => {
           <input
             type="password"
             value={password}
+            autoComplete="currentPassword"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
