@@ -27,7 +27,21 @@ const resolvers = {
       return Book.find({}).populate('author', { name: 1 });
     },
     allAuthors: async () => {
-      return Author.find({});
+      console.log('Author.find');
+      const authorsDb = await Author.find({});
+
+      const booksDb = await Book.find({}).populate('author', { name: 1 });
+
+      const authorsToFrontend = authorsDb.map((author) => {
+        return {
+          name: author.name,
+          born: author.born,
+          bookCount: booksDb.filter((book) => book.author.name === author.name)
+            .length,
+        };
+      });
+
+      return authorsToFrontend;
     },
     me: (root, args, context) => {
       return context.currentUser;
